@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Donors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background: #ff4b2b;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #ff4b2b;
+            color: white;
+        }
+         .back-button {
+            display: block;
+            width: 150px;
+            margin: 1rem auto;
+            padding: 0.8rem;
+            background-color: #ff4b2b;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #ff416c;
+        }
+        .delete-button {
+            background-color: #e60000;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #cc0000;
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Donor List</h1>
+    </div>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Contact</th>
+                    <th>Blood Group</th>
+                    <th>Last Donation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donor in donors %}
+                <tr>
+                    <td>{{ donor.donor_id }}</td>
+                    <td>{{ donor.name }}</td>
+                    <td>{{ donor.age }}</td>
+                    <td>{{ donor.contact }}</td>
+                    <td>{{ donor.blood_group }}</td>
+                    <td>{{ donor.last_donation or 'N/A' }}</td>
+                    <td>
+                        <form action="/delete-donor/{{ donor.donor_id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete donor {{ donor.name }} and all their donations?');">
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
+                    </td>
+                     
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/home" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>
+

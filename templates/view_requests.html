@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Blood Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #e73827;
+            color: white;
+        }
+        .actions form {
+            display: inline;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn.approve {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn.reject {
+            background-color: #dc3545;
+            color: white;
+        }
+        .flash-message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+         .back-button {
+            display: block;
+            width: 150px;
+            margin: 1rem auto;
+            padding: 0.8rem;
+            background-color: #ff4b2b;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #ff416c;
+        }
+    </style>
+</head>
+<body>
+    <h2>View Requests</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Requester</th>
+                <th>Blood Group</th>
+                <th>Units</th>
+                <th>Status</th>
+                <th>Request Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req['request_id'] }}</td>
+                <td>{{ req['request_by'] }}</td>
+                <td>{{ req['blood_group'] }}</td>
+                <td>
+                    {% if req['whole_blood_units'] > 0 %}Whole: {{ req['whole_blood_units'] }}<br>{% endif %}
+                    {% if req['rbc_units'] > 0 %}RBC: {{ req['rbc_units'] }}<br>{% endif %}
+                    {% if req['plasma_units'] > 0 %}Plasma: {{ req['plasma_units'] }}<br>{% endif %}
+                    {% if req['platelet_units'] > 0 %}Platelet: {{ req['platelet_units'] }}{% endif %}
+                </td>
+                <td>{{ req['status'] }}</td>
+                <td>{{ req['request_date'].strftime('%Y-%m-%d') }}</td>
+                <td class="actions">
+                    {% if req['status'] == 'Pending' %}
+                    <form method="POST">
+                        <input type="hidden" name="request_id" value="{{ req['request_id'] }}">
+                        <button class="btn approve" name="action" value="approve">Approve</button>
+                    </form>
+                    <form method="POST">
+                        <input type="hidden" name="request_id" value="{{ req['request_id'] }}">
+                        <button class="btn reject" name="action" value="reject">Reject</button>
+                    </form>
+                    {% else %}
+                    {{ req['status'] }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/home" class="back-button">Back to Dashboard</a>
+   </div>
+</body>
+</html>
+

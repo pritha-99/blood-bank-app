@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Record Donation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #f7f7f7, #e8f0ff);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            display: block;
+            color: #333;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 0.9rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        select:focus, input:focus {
+            border-color: #ff4b2b;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            color: white;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3);
+        }
+
+        .flash-message {
+            margin: 1rem 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: opacity 0.5s ease-out;
+            text-align: center;
+        }
+
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
+        }
+
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 5px solid #dc3545;
+        }
+
+        .flash-info {
+            background-color: #cce5ff;
+            color: #004085;
+            border-left: 5px solid #004085;
+        }
+         .back-button {
+            display: block;
+            width: 150px;
+            margin: 1rem auto;
+            padding: 0.8rem;
+            background-color: #ff4b2b;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #ff416c;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🩸 Record Blood Donation</h1>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message 
+                      {% if category == 'success' %}flash-success
+                      {% elif category == 'error' %}flash-error
+                      {% else %}flash-info{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <form method="POST" onsubmit="return validateForm()">
+            <label for="donor_id">Select Donor:</label>
+            <select name="donor_id" id="donor_id" required>
+                <option value="" disabled selected>Select Donor ID</option>
+                {% for donor in donors %}
+                    <option value="{{ donor.donor_id }}">{{ donor.donor_id }} - {{ donor.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="whole_blood_units">Whole Blood Units (max 1):</label>
+            <input type="number" step="0.1" name="whole_blood_units" id="whole_blood_units" placeholder="e.g., 1.0">
+
+            <label for="rbc_units">RBC Units (max 1):</label>
+            <input type="number" step="0.1" name="rbc_units" id="rbc_units" placeholder="e.g., 1.0">
+
+            <label for="plasma_units">Plasma Units:</label>
+            <input type="number" step="0.1" name="plasma_units" id="plasma_units" placeholder="optional">
+
+            <label for="platelet_units">Platelet Units (max 1):</label>
+            <input type="number" step="0.1" name="platelet_units" id="platelet_units" placeholder="e.g., 1.0">
+
+            <button type="submit">💾 Record Donation</button>
+        </form>
+        <div style="text-align: center;">
+            <a href="/home" class="back-button">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+    function showFlashMessage(message, type = "error") {
+        const flashContainer = document.createElement("div");
+        flashContainer.className = `flash-message flash-${type}`;
+        flashContainer.textContent = message;
+
+        const formContainer = document.querySelector(".container");
+        formContainer.prepend(flashContainer);
+
+        setTimeout(() => {
+            flashContainer.style.opacity = 0;
+            setTimeout(() => flashContainer.remove(), 500);
+        }, 3000);
+    }
+
+    function validateForm() {
+        const whole = parseFloat(document.getElementById('whole_blood_units').value) || 0;
+        const rbc = parseFloat(document.getElementById('rbc_units').value) || 0;
+        const platelet = parseFloat(document.getElementById('platelet_units').value) || 0;
+
+        if (whole > 0 && (rbc > 0 || platelet > 0)) {
+            showFlashMessage("⚠️ You can donate either Whole Blood OR RBC/Platelets — not both at once.");
+            return false;
+        }
+
+        if (whole > 1 || rbc > 1 || platelet > 1) {
+            showFlashMessage("⚠️ Maximum donation for Whole Blood, RBC, or Platelets is 1 unit.");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Auto-hide any server-side flash messages after 3s
+    setTimeout(function() {
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(function(message) {
+            message.style.opacity = 0;
+            setTimeout(function() {
+                message.style.display = 'none';
+            }, 500);
+        });
+    }, 3000);
+    </script>
+
+</body>
+</html>
+

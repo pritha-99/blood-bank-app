@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Inventory Details - Blood Bank Management System</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .navbar h1 {
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+
+        thead {
+            background: #ff4b2b;
+            color: white;
+        }
+
+        th, td {
+            padding: 1.2rem;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background-color: #fff5f3;
+        }
+
+        th:last-child, td:last-child {
+            white-space: nowrap;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            background-color: #ff4b2b;
+            color: white;
+            padding: 0.9rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 75, 43, 0.3);
+        }
+
+        .back-button:hover {
+            background-color: #ff416c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .navbar h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Inventory Details</h1>
+    </div>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Blood Group</th>
+                    <th>Whole Blood Units</th>
+                    <th>RBC Units</th>
+                    <th>Plasma Units</th>
+                    <th>Platelet Units</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventory %}
+                <tr>
+                    <td>{{ item.blood_group }}</td>
+                    <td>{{ item.whole_blood_units }}</td>
+                    <td>{{ item.rbc_units }}</td>
+                    <td>{{ item.plasma_units }}</td>
+                    <td>{{ item.platelet_units }}</td>
+                    <td>{{ item.last_updated }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="text-align: center;">
+            <a href="/home" class="back-button">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
+

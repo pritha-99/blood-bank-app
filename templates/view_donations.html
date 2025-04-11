@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Details - Blood Bank Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background: #ff4b2b;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        th {
+            background: #ff4b2b;
+            color: white;
+        }
+        .back-button {
+            display: block;
+            width: 150px;
+            margin: 1rem auto;
+            padding: 0.8rem;
+            background-color: #ff4b2b;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #ff416c;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Donation Details</h1>
+    </div>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor ID</th>
+                    <th>Donor Name</th>
+                    <th>Donation ID</th>
+                    <th>Donation Date</th>
+                    <th>Whole Blood Units</th>
+                    <th>RBC Units</th>
+                    <th>Plasma Units</th>
+                    <th>Platelet Units</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donation in donations %}
+                <tr>
+                    <td>{{ donation.donor_id }}</td>
+                    <td>{{ donation.name }}</td>
+                    <td>{{ donation.donation_id }}</td>
+                    <td>{{ donation.donation_date }}</td>
+                    <td>{{ donation.whole_blood_units }}</td>
+                    <td>{{ donation.rbc_units }}</td>
+                    <td>{{ donation.plasma_units }}</td>
+                    <td>{{ donation.platelet_units }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/home" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>
+
