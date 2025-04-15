@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,94 +6,125 @@
     <title>Add Donor - Blood Bank Management System</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #a18cd1, #fbc2eb); /* Purple-Pink gradient */
             margin: 0;
             padding: 0;
         }
+
         .navbar {
-            background: #ff4b2b;
+            background: rgba(0, 0, 0, 0.2);
             color: #fff;
-            padding: 1rem;
+            padding: 1.5rem;
             text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
         }
+
         .container {
             padding: 2rem;
             max-width: 600px;
-            margin: auto;
+            margin: 2rem auto;
             background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
+
         .container h2 {
             text-align: center;
             margin-bottom: 1rem;
+            color: #7b1fa2;
         }
+
         .container label {
             display: block;
             margin-top: 1rem;
             font-weight: bold;
+            color: #444;
         }
+
         .container input,
         .container select {
             width: 100%;
             padding: 0.8rem;
             margin-top: 0.3rem;
             border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .container button {
-            width: 100%;
-            padding: 0.8rem;
-            margin-top: 1.5rem;
-            background-color: #ff4b2b;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
+            border-radius: 6px;
             font-size: 1rem;
-            cursor: pointer;
-        }
-        .container button:hover {
-            background-color: #ff416c;
         }
 
-        /* Flash message styles */
+        .container button {
+    width: 100%;
+    padding: 0.9rem;
+    margin-top: 2rem;
+    background: linear-gradient(to right, #7b1fa2, #e53935); /* Purple to Red Gradient */
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.container button:hover {
+    background: linear-gradient(to right, #ab47bc, #c62828); /* Lighter Purple to Darker Red */
+    transform: scale(1.05);
+}
         .flash {
             padding: 1rem;
-            border-radius: 4px;
+            border-radius: 8px;
             margin: 1rem 0;
             font-weight: bold;
+            text-align: center;
         }
+
         .flash.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: #e0f7fa;
+            color: #00796b;
+            border-left: 5px solid #009688;
         }
+
         .flash.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 5px solid #e53935;
         }
-         .back-button {
+
+        .back-button {
             display: block;
-            width: 150px;
-            margin: 1rem auto;
+            width: 180px;
+            margin: 2rem auto 0;
             padding: 0.8rem;
-            background-color: #ff4b2b;
+            background: linear-gradient(to right, #ab47bc, #ff4b2b);
             color: white;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 30px;
             text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
         }
+
         .back-button:hover {
-            background-color: #ff416c;
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <h1>Add Donor</h1>
+        Add Donor 🩸
     </div>
+    
+     <div style="text-align: center;">
+            <a href="/home" class="back-button">← Back to Dashboard</a>
+     </div>
     <div class="container">
         <h2>Donor Information</h2>
 
@@ -109,7 +139,6 @@
 
         <!-- Donor Form -->
         <form action="/add-donor" method="POST">
-
             <label for="name">Full Name</label>
             <input type="text" id="name" name="name" required>
 
@@ -127,16 +156,14 @@
                 {% endfor %}
             </select>
 
-            <label for="last_donation">Last Donation Date(Optional for first time donor)</label>
+            <label for="last_donation">Last Donation Date (optional for first-time donor)</label>
             <input type="date" id="last_donation" name="last_donation">
 
             <button type="submit">Add Donor</button>
         </form>
-        <div style="text-align: center;">
-            <a href="/home" class="back-button">← Back to Dashboard</a>
-        </div>
+
+       
     </div>
 </body>
 </html>
-
 

@@ -1,132 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>View Blood Requests</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Blood Request List - Blood Bank Management System</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 2rem;
-            background-color: #f9f9f9;
+        * {
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #a18cd1, #fbc2eb); /* Purple-Pink gradient */
+            color: #333;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            text-align: center;
+            padding: 1.5rem;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
+            border-radius: 12px;
+            overflow: hidden;
         }
-        th, td {
-            padding: 1rem;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background: #e73827;
+
+        thead {
+            background: linear-gradient(to right, #ff4b2b, #2b59ff);
             color: white;
         }
-        .actions form {
-            display: inline;
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
         }
+
+        tbody tr:nth-child(even) {
+            background: #f1f6ff;
+        }
+
+        tbody tr:hover {
+            background-color: #ffe5f9;
+            transition: background 0.3s ease;
+        }
+
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 2rem auto 0;
+            padding: 0.9rem;
+            background: linear-gradient(to right, #9145ff, #2b59ff);
+            color: white;
+            text-align: center;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(43, 89, 255, 0.3);
+        }
+
+        /* Status Badge Colors */
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .status-badge.pending {
+            background-color: #ffb74d; /* Orange for Pending */
+        }
+
+        .status-badge.approved {
+            background-color: #66bb6a; /* Green for Approved */
+        }
+
+        .status-badge.rejected {
+            background-color: #ff5252; /* Red for Rejected */
+        }
+
+        /* Button Styles */
         .btn {
             padding: 0.5rem 1rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
+
         .btn.approve {
             background-color: #28a745;
             color: white;
         }
+
         .btn.reject {
             background-color: #dc3545;
             color: white;
         }
         .flash-message {
-            margin-bottom: 1rem;
+            margin: 1rem 2rem;
             padding: 1rem;
-            border-radius: 5px;
-        }
-        .flash-message.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .flash-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-         .back-button {
-            display: block;
-            width: 150px;
-            margin: 1rem auto;
-            padding: 0.8rem;
-            background-color: #ff4b2b;
-            color: white;
+            border-radius: 12px;
+            font-weight: bold;
             text-align: center;
-            border-radius: 4px;
-            text-decoration: none;
+            animation: fadeIn 0.5s ease-in;
         }
-        .back-button:hover {
-            background-color: #ff416c;
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .flash-success {
+            background-color: #e0f7fa;
+            color: #00796b;
+            border-left: 5px solid #009688;
+        }
+
+        .flash-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 5px solid #e53935;
+        }
+
+        .flash-info {
+            background-color: #f3e5f5;
+            color: #6a1b9a;
+            border-left: 5px solid #8e24aa;
+        }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead {
+                display: none;
+            }
+            td {
+                position: relative;
+                padding-left: 50%;
+                text-align: left;
+            }
+            td::before {
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                width: 45%;
+                font-weight: bold;
+                color: #555;
+                white-space: nowrap;
+            }
+
+            td:nth-of-type(1)::before { content: "ID"; }
+            td:nth-of-type(2)::before { content: "Requester"; }
+            td:nth-of-type(3)::before { content: "Blood Group"; }
+            td:nth-of-type(4)::before { content: "Units"; }
+            td:nth-of-type(5)::before { content: "Status"; }
+            td:nth-of-type(6)::before { content: "Request Date"; }
+            td:nth-of-type(7)::before { content: "Actions"; }
         }
     </style>
 </head>
 <body>
-    <h2>View Requests</h2>
-
+    <div class="navbar">
+        🩸 Blood Request List
+    </div>
+    <a href="/home" class="back-button">← Back to Dashboard</a>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="flash-message {{ category }}">{{ message }}</div>
+          <div class="flash-message 
+                      {% if category == 'success' %}flash-success
+                      {% elif category == 'error' %}flash-error
+                      {% else %}flash-info{% endif %}">
+            {{ message }}
+          </div>
         {% endfor %}
       {% endif %}
     {% endwith %}
-    
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Requester</th>
-                <th>Blood Group</th>
-                <th>Units</th>
-                <th>Status</th>
-                <th>Request Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for req in requests %}
-            <tr>
-                <td>{{ req['request_id'] }}</td>
-                <td>{{ req['request_by'] }}</td>
-                <td>{{ req['blood_group'] }}</td>
-                <td>
-                    {% if req['whole_blood_units'] > 0 %}Whole: {{ req['whole_blood_units'] }}<br>{% endif %}
-                    {% if req['rbc_units'] > 0 %}RBC: {{ req['rbc_units'] }}<br>{% endif %}
-                    {% if req['plasma_units'] > 0 %}Plasma: {{ req['plasma_units'] }}<br>{% endif %}
-                    {% if req['platelet_units'] > 0 %}Platelet: {{ req['platelet_units'] }}{% endif %}
-                </td>
-                <td>{{ req['status'] }}</td>
-                <td>{{ req['request_date'].strftime('%Y-%m-%d') }}</td>
-                <td class="actions">
-                    {% if req['status'] == 'Pending' %}
-                    <form method="POST">
-                        <input type="hidden" name="request_id" value="{{ req['request_id'] }}">
-                        <button class="btn approve" name="action" value="approve">Approve</button>
-                    </form>
-                    <form method="POST">
-                        <input type="hidden" name="request_id" value="{{ req['request_id'] }}">
-                        <button class="btn reject" name="action" value="reject">Reject</button>
-                    </form>
-                    {% else %}
-                    {{ req['status'] }}
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="/home" class="back-button">Back to Dashboard</a>
-   </div>
+    <div class="container">
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Requester</th>
+                        <th>Blood Group</th>
+                        <th>Units</th>
+                        <th>Status</th>
+                        <th>Request Date</th>
+                        <th>Actions</th>
+                        <th>Action Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <td>{{ req['request_id'] }}</td>
+                        <td>{{ req['request_by'] }}</td>
+                        <td>{{ req['blood_group'] }}</td>
+                        <td>
+                            {% if req['whole_blood_units'] > 0 %}Whole: {{ req['whole_blood_units'] }}<br>{% endif %}
+                            {% if req['rbc_units'] > 0 %}RBC: {{ req['rbc_units'] }}<br>{% endif %}
+                            {% if req['plasma_units'] > 0 %}Plasma: {{ req['plasma_units'] }}<br>{% endif %}
+                            {% if req['platelet_units'] > 0 %}Platelet: {{ req['platelet_units'] }}{% endif %}
+                        </td>
+                        <td>
+                            {% if req['status'] == 'Pending' %}
+                                <span class="status-badge pending">Pending</span>
+                            {% elif req['status'] == 'Approved' %}
+                                <span class="status-badge approved">Approved</span>
+                            {% elif req['status'] == 'Rejected' %}
+                                <span class="status-badge rejected">Rejected</span>
+                            {% else %}
+                                {{ req['status'] }}
+                            {% endif %}
+                        </td>
+                        <td>{{ req['request_date'].strftime('%Y-%m-%d') }}</td>
+                        <td class="actions">
+                            {% if req['status'] == 'Pending' %}
+                            <form method="POST">
+                                <input type="hidden" name="request_id" value="{{ req['request_id'] }}">
+                                <button class="btn approve" name="action" value="approve">Approve</button>
+                            </form>
+                            <form method="POST">
+                                <input type="hidden" name="request_id" value="{{ req['request_id'] }}">
+                                <button class="btn reject" name="action" value="reject">Reject</button>
+                            </form>
+                            {% else %}
+                            <span style="opacity: 0.6;">—</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ req['action_date'].strftime('%Y-%m-%d') if req['action_date'] else '—' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+   
+        
+    </div>
+     <script>
+    function showFlashMessage(message, type = "error") {
+        const flashContainer = document.createElement("div");
+        flashContainer.className = `flash-message flash-${type}`;
+        flashContainer.textContent = message;
+
+        const formContainer = document.querySelector(".container");
+        formContainer.prepend(flashContainer);
+
+        setTimeout(() => {
+            flashContainer.style.opacity = 0;
+            setTimeout(() => flashContainer.remove(), 50);
+        }, 3000);
+    }
+    </script>
 </body>
 </html>
 

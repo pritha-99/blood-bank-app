@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Blood Bank Management System</title>
+    <title>Blood Bank Management</title>
     <style>
         * {
             margin: 0;
@@ -11,75 +12,76 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            color: #333;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
         }
         .login-container {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 420px;
             animation: fadeIn 1s ease-out;
+            text-align: center;
+        }
+        .login-container h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #4a4a4a;
+        }
+        .login-container .emoji {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
         .login-container h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            font-weight: 600;
-            color: #ffecb3;
+            font-size: 1.5rem;
+            margin-bottom: 1.8rem;
+            color: #5f78ff;
         }
         .login-container input {
             width: 100%;
             padding: 1rem;
             margin: 0.8rem 0;
-            border: none;
-            border-radius: 4px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
-            background-color: #fff;
+            background-color: #f9f9f9;
             color: #333;
-            transition: all 0.3s ease;
+            transition: box-shadow 0.3s ease;
         }
         .login-container input:focus {
             outline: none;
-            box-shadow: 0 0 5px rgba(255, 66, 107, 0.6);
-            border: 1px solid #ff4b2b;
+            box-shadow: 0 0 6px #90caf9;
+            border-color: #5f78ff;
         }
         .login-container button {
             width: 100%;
             padding: 1rem;
-            background-color: #ff4b2b;
+            background-color: #5f78ff;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             color: #fff;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-        .login-container button:hover {
-            background-color: #ff416c;
-            transform: translateY(-3px);
-        }
-        .login-container .forgot-password {
-            text-align: center;
             margin-top: 1rem;
         }
-        .login-container .forgot-password a {
-            color: #ffecb3;
-            text-decoration: none;
+        .login-container button:hover {
+            background-color: #7986cb;
+            transform: scale(1.03);
+        }
+        .login-container .forgot-password {
+            margin-top: 1rem;
             font-size: 0.9rem;
-            transition: color 0.3s ease;
         }
-        .login-container .forgot-password a:hover {
-            color: #ff4b2b;
-        }
+       
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -90,18 +92,72 @@
                 transform: translateY(0);
             }
         }
+        .flash-message {
+            margin: 1rem 2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+       
+
+        .flash-success {
+            background-color: #e0f7fa;
+            color: #00796b;
+            border-left: 5px solid #009688;
+        }
+
+        .flash-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 5px solid #e53935;
+        }
+
+        .flash-info {
+            background-color: #f3e5f5;
+            color: #6a1b9a;
+            border-left: 5px solid #8e24aa;
+        }
+
     </style>
 </head>
 <body>
+     {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message 
+                      {% if category == 'success' %}flash-success
+                      {% elif category == 'error' %}flash-error
+                      {% else %}flash-info{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     <div class="login-container">
-        <h2>Login</h2>
+        <div class="emoji">🩸</div>
+        <h1>Blood Bank Management</h1>
+        <h2>Welcome Back!</h2>
         <form action="/login" method="POST">
             <input type="text" name="user_id" placeholder="User ID" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
-       
+        
     </div>
+    <script>
+        setTimeout(function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                message.style.opacity = 0;
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, 500);
+            });
+        }, 3000);
+    </script>
 </body>
 </html>
 
