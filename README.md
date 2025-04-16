@@ -37,3 +37,4 @@ Open your browser and go to http://localhost:5000
 
 📎 Note
 The app runs locally due to hosting limitations. All features are functional and can be demonstrated offline.
+The code base can be altered to remove triggers which aren't widely supported in online hosting platforms
