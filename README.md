@@ -23,6 +23,9 @@ Dashboard for easy navigation
 🗃️ Database
 MySQL is used to store donor info, blood donation records, blood requests, and inventory data. Triggers are used to auto-update inventory when a request is approved.
 
+Detailed Explanation:
+Refer this YT video: https://youtu.be/H6JPRTzWaQA
+
 ⚙️ How to Run
 Clone the repository
 
